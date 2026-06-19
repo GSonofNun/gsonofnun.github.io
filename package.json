@@ -1,0 +1,26 @@
+{
+  "name": "joshua-grzybowski-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio of Joshua Grzybowski — native Windows systems engineer.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.5.0",
+    "three": "^0.171.0"
+  },
+  "devDependencies": {
+    "@fontsource-variable/fraunces": "^5.1.0",
+    "@fontsource-variable/hanken-grotesk": "^5.1.0",
+    "@fontsource/jetbrains-mono": "^5.1.0",
+    "@types/three": "^0.171.0",
+    "sharp": "^0.33.5",
+    "typescript": "^5.7.0"
+  }
+}

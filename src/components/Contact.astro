@@ -1,0 +1,151 @@
+---
+/**
+ * Contact links. `href` present => live link. `href` omitted => the channel renders
+ * as a clearly-marked "pending" chip so the site never ships a dead link.
+ */
+interface Link {
+  label: string;
+  value: string;
+  href?: string;
+}
+
+const links: Link[] = [
+  { label: 'Email', value: 'sonofnun@outlook.com', href: 'mailto:sonofnun@outlook.com' },
+  { label: 'GitHub', value: 'github.com/GSonofNun', href: 'https://github.com/GSonofNun' },
+  { label: 'X', value: '@sonofnun', href: 'https://x.com/sonofnun' },
+  {
+    label: 'LinkedIn',
+    value: 'in/jbgrzybowski',
+    href: 'https://www.linkedin.com/in/jbgrzybowski',
+  },
+  {
+    label: 'Microsoft Store',
+    value: 'Published apps',
+    href: 'https://apps.microsoft.com/search/publisher?name=Joshua+Grzybowski&hl=en-US&gl=US',
+  },
+];
+---
+
+<section id="contact" class="section contact">
+  <div class="wrap contact__inner">
+    <p class="eyebrow">Contact</p>
+    <h2 class="contact__title">
+      If the work reads true to you,<br />let’s talk.
+    </h2>
+    <p class="contact__lede">
+      Best by email. No forms, no funnels — just a message.
+    </p>
+
+    <ul class="contact__list" role="list">
+      {links.map((l) =>
+        l.href ? (
+          <li class="contact__item">
+            <a
+              class="contact__link"
+              href={l.href}
+              {...(l.href.startsWith('http')
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
+            >
+              <span class="contact__label mono">{l.label}</span>
+              <span class="contact__value">{l.value}</span>
+              <svg class="contact__arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </li>
+        ) : (
+          <li class="contact__item contact__item--pending">
+            <div class="contact__link" data-placeholder aria-disabled="true">
+              <span class="contact__label mono">{l.label}</span>
+              <span class="contact__value">link pending</span>
+            </div>
+          </li>
+        ),
+      )}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact__inner {
+    max-width: 56rem;
+  }
+  .contact__title {
+    font-size: var(--step-5);
+    margin: var(--space-4) 0 var(--space-4);
+    letter-spacing: -0.03em;
+  }
+  .contact__lede {
+    color: var(--ink-2);
+    font-size: var(--step-1);
+    margin-bottom: var(--space-7);
+  }
+  .contact__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .contact__item {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .contact__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding-block: clamp(var(--space-4), 3vw, var(--space-5));
+    transition: padding-left 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  a.contact__link:hover {
+    padding-left: var(--space-3);
+    color: var(--accent);
+  }
+  .contact__label {
+    flex: none;
+    width: 9rem;
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  a.contact__link:hover .contact__label {
+    color: var(--accent);
+  }
+  .contact__value {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--ink);
+  }
+  .contact__arrow {
+    margin-left: auto;
+    color: var(--ink-3);
+    transform: translateX(-6px);
+    opacity: 0;
+    transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+  }
+  a.contact__link:hover .contact__arrow {
+    transform: translateX(0);
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .contact__item--pending .contact__link {
+    cursor: default;
+  }
+  .contact__item--pending .contact__value {
+    font-family: var(--font-mono);
+    font-size: var(--step-0);
+    color: var(--ink-3);
+    font-style: normal;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 560px) {
+    .contact__link {
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-3);
+    }
+    .contact__label {
+      width: 100%;
+    }
+  }
+</style>

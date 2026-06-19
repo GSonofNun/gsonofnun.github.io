@@ -1,0 +1,16 @@
+# Normalize text to LF in the repo (stable across Windows/Linux CI),
+# let Git check out native line endings locally.
+* text=auto eol=lf
+
+# Treat assets as binary (no EOL or diff munging).
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.webm  binary
+*.mp4   binary
+*.woff  binary
+*.woff2 binary
+*.ico   binary

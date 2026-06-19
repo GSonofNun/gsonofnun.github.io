@@ -1,0 +1,78 @@
+---
+const year = 2026;
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <span class="site-footer__name">Joshua Grzybowski</span>
+      <span class="site-footer__role">Native Windows systems engineer</span>
+    </div>
+
+    <p class="site-footer__colophon mono">
+      Static site. No analytics, no cookies, no tracking. Built with Astro and a
+      single lazy three.js scene — consistent with the software it shows.
+    </p>
+
+    <div class="site-footer__meta">
+      <a href="#top" class="site-footer__top">Back to top ↑</a>
+      <span class="site-footer__copy">© {year} Joshua Grzybowski</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--hairline);
+    padding-block: var(--space-7);
+  }
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .site-footer__brand {
+    display: flex;
+    flex-direction: column;
+  }
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+  }
+  .site-footer__role {
+    color: var(--ink-3);
+    font-size: var(--step--1);
+  }
+  .site-footer__colophon {
+    color: var(--ink-3);
+    font-size: 0.74rem;
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+  .site-footer__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--hairline);
+    color: var(--ink-3);
+    font-size: var(--step--1);
+  }
+  .site-footer__top {
+    transition: color 0.2s var(--ease);
+  }
+  .site-footer__top:hover {
+    color: var(--ink);
+  }
+
+  @media (min-width: 800px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+    .site-footer__meta {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

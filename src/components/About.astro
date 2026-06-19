@@ -1,0 +1,147 @@
+---
+// Naming lineage, kept as a quiet aside rather than a sermon.
+const lineage = [
+  { name: 'Jericode', gloss: 'Jericho — the wall that came down' },
+  { name: 'Sefer', gloss: 'ספר — book, scroll' },
+  { name: 'Shofar', gloss: 'the ram’s horn sounded at Jericho' },
+  { name: 'Verity', gloss: 'truth, plainly' },
+];
+---
+
+<section id="about" class="section about">
+  <div class="wrap about__grid">
+    <header class="about__head">
+      <p class="eyebrow">About</p>
+      <h2 class="about__title">Joshua Grzybowski</h2>
+    </header>
+
+    <div class="about__body">
+      <p class="about__lede">
+        I’m a senior systems engineer. By day I work on
+        <strong> ObserVIEW</strong> at <strong>Vibration Research</strong> — real-time
+        signal analysis, FFTs, 3D spectrograms, the kind of software where the numbers
+        have to be right and fast at the same time.
+      </p>
+      <p>
+        The rest is native Windows software I build because I want it to exist and to be
+        good: an agentic IDE, a contemplative markdown reader, a PDF engine, a Git
+        client with no dependencies. Different problems, one standard — if a component
+        has to be written by hand to be worth using, it gets written by hand.
+      </p>
+      <p>
+        Away from the keyboard I play piano and spend time with my family. Both, it
+        turns out, reward the same things software does: structure, patience, and a high
+        tolerance for getting the small things right.
+      </p>
+
+      <div class="about__lineage" aria-labelledby="lineage-h">
+        <h3 id="lineage-h" class="about__lineage-h">A quiet thread in the names</h3>
+        <p class="about__lineage-note">
+          Several projects carry a deliberate lineage — a name from the account of
+          Joshua at Jericho, which is also where the handle comes from.
+        </p>
+        <dl class="about__lineage-list">
+          {lineage.map((l) => (
+            <div class="about__lineage-item">
+              <dt>{l.name}</dt>
+              <dd>{l.gloss}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    gap: clamp(var(--space-6), 6vw, var(--space-9));
+  }
+  .about__title {
+    font-size: var(--step-4);
+    margin-top: var(--space-3);
+  }
+  .about__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: var(--measure);
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .about__body strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .about__lede {
+    font-size: var(--step-1);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .about__lineage {
+    margin-top: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    border: 1px solid var(--hairline);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--bg-2);
+  }
+  .about__lineage-h {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 420;
+    margin-bottom: var(--space-2);
+  }
+  .about__lineage-note {
+    font-size: var(--step--1);
+    color: var(--ink-3);
+    margin-bottom: var(--space-4);
+  }
+  .about__lineage-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+  .about__lineage-item {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .about__lineage-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .about__lineage-item dt {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    color: var(--ink);
+  }
+  .about__lineage-item dd {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--ink-3);
+    font-style: italic;
+  }
+
+  @media (min-width: 900px) {
+    .about__grid {
+      grid-template-columns: minmax(220px, 0.4fr) 1fr;
+      align-items: start;
+    }
+    .about__head {
+      position: sticky;
+      top: 96px;
+    }
+  }
+  @media (max-width: 460px) {
+    .about__lineage-item {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+  }
+</style>

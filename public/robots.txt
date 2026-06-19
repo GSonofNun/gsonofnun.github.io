@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://joshuagrzybowski.dev/sitemap-index.xml

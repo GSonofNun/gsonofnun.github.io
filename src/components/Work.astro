@@ -1,0 +1,138 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import ProjectModal from './ProjectModal.astro';
+import { flagship, applications, professional } from '../data/projects';
+---
+
+<section id="work" class="section work">
+  <div class="wrap">
+    <header class="work__intro">
+      <p class="eyebrow">Selected work</p>
+      <h2 class="work__title">Software that earns its place on the platform.</h2>
+      <p class="work__lede">
+        Each of these is native by choice — built down to the renderer, the data
+        structure, or the protocol when the off-the-shelf path couldn’t carry the UX.
+        These apps don’t share a design language; the engineering discipline is what
+        they have in common.
+      </p>
+    </header>
+
+    <div class="work__feature">
+      <ProjectCard project={flagship} variant="feature" />
+    </div>
+
+    <ul class="work__grid" role="list">
+      {applications.map((p) => (
+        <li><ProjectCard project={p} /></li>
+      ))}
+    </ul>
+
+    {professional.length > 0 && (
+      <div class="work__pro">
+        <div class="work__pro-head">
+          <p class="eyebrow">Professional</p>
+          <p class="work__pro-note">
+            Employer work, shown at the level that’s publicly visible.
+          </p>
+        </div>
+        <ul class="work__grid work__grid--pro" role="list">
+          {professional.map((p) => (
+            <li><ProjectCard project={p} /></li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </div>
+</section>
+
+{/* Detail dialogs live once, after the grid */}
+{[flagship, ...applications, ...professional].map((p) => <ProjectModal project={p} />)}
+
+<style>
+  .work__intro {
+    max-width: 60ch;
+    margin-bottom: clamp(var(--space-7), 6vw, var(--space-9));
+  }
+  .work__title {
+    font-size: var(--step-4);
+    margin: var(--space-4) 0 var(--space-5);
+    max-width: 18ch;
+  }
+  .work__lede {
+    color: var(--ink-2);
+    font-size: var(--step-1);
+    line-height: 1.55;
+  }
+  .work__feature {
+    margin-bottom: var(--space-6);
+  }
+  .work__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  }
+  .work__pro {
+    margin-top: clamp(var(--space-7), 7vw, var(--space-9));
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--hairline);
+  }
+  .work__pro-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+  }
+  .work__pro-note {
+    color: var(--ink-3);
+    font-size: var(--step--1);
+  }
+  /* ObserVIEW alone — keep it from stretching to full width */
+  .work__grid--pro {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 0.5fr));
+  }
+</style>
+
+<script>
+  // Native <dialog> controller: open by data-open-dialog, close by button or
+  // backdrop click. Focus-trap, ESC, and focus restore are handled by the
+  // platform. Scroll is locked on the root while a dialog is open.
+  function lock() {
+    document.documentElement.style.overflow = 'hidden';
+  }
+  function unlock() {
+    document.documentElement.style.overflow = '';
+  }
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+
+    const opener = target.closest<HTMLElement>('[data-open-dialog]');
+    if (opener) {
+      const id = opener.dataset.openDialog!;
+      const dlg = document.getElementById(id) as HTMLDialogElement | null;
+      if (dlg) {
+        dlg.showModal();
+        lock();
+        dlg.addEventListener('close', unlock, { once: true });
+      }
+      return;
+    }
+
+    const closer = target.closest<HTMLElement>('[data-close-dialog]');
+    if (closer) {
+      closer.closest('dialog')?.close();
+      return;
+    }
+  });
+
+  // Click on the backdrop (outside the panel) closes the dialog.
+  document.querySelectorAll<HTMLDialogElement>('dialog.modal').forEach((dlg) => {
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close();
+    });
+  });
+</script>

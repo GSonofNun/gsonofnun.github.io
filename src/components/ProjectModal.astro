@@ -1,0 +1,305 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import type { Project } from '../data/projects';
+import { shot } from '../lib/images';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+
+// Sefer ships a short theme-change clip; the poster is a small optimized still
+// (not the full-size original) so it never weighs on the initial load.
+const seferPoster =
+  project.id === 'sefer'
+    ? (await getImage({ src: shot('Sefer/sefer-theme.png'), width: 900, format: 'webp' })).src
+    : null;
+---
+
+<dialog
+  id={`dlg-${project.id}`}
+  class="modal"
+  style={`--ca:${project.accent.base};--cas:${project.accent.soft}`}
+  aria-labelledby={`dlg-${project.id}-title`}
+>
+  <div class="modal__panel">
+    <header class="modal__head">
+      <div class="modal__heading">
+        <p class="eyebrow" style="color:var(--ca)">{project.platform}</p>
+        <h2 id={`dlg-${project.id}-title`} class="modal__title">
+          {project.name}
+          {project.aka && <span class="modal__aka">aka {project.aka}</span>}
+        </h2>
+        <p class="modal__oneliner">{project.oneLiner}</p>
+      </div>
+      <button class="modal__close" type="button" data-close-dialog aria-label="Close details">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <p class="modal__hook">{project.hook}</p>
+
+    <div class="modal__body">
+      <div class="modal__gallery">
+        {project.id === 'sefer' && seferPoster && (
+          <figure class="modal__shot modal__shot--video">
+            <video
+              class="modal__media"
+              controls
+              preload="none"
+              playsinline
+              poster={seferPoster}
+              width="1600"
+              height="1000"
+            >
+              <source src="/screenshots/Sefer/Sefer_ThemeChange.webm" type="video/webm" />
+              Your browser can’t play this clip; it shows Sefer switching themes.
+            </video>
+            <figcaption>Switching themes — the Atelier palette in motion.</figcaption>
+          </figure>
+        )}
+        {project.shots.map((s, i) => (
+          <figure class="modal__shot">
+            <Picture
+              src={shot(s.key)}
+              formats={['avif', 'webp']}
+              widths={[640, 960, 1400]}
+              sizes="(min-width: 900px) 820px, 92vw"
+              alt={s.alt}
+              loading="lazy"
+              decoding="async"
+              pictureAttributes={{ class: 'modal__media' }}
+            />
+            <figcaption>{s.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <aside class="modal__aside">
+        <div class="modal__story">
+          {project.story.map((para) => <p>{para}</p>)}
+        </div>
+
+        <div class="modal__meta">
+          <h3 class="modal__meta-h">Built with</h3>
+          <ul class="modal__tags">
+            {project.tech.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+
+        {project.link && (
+          <a class="btn btn--ghost modal__link" href={project.link.href} target="_blank" rel="noopener noreferrer">
+            {project.link.label}
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        )}
+      </aside>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .modal {
+    width: min(1040px, 94vw);
+    max-height: 92svh;
+    /* restore centering: the global `* { margin: 0 }` reset would otherwise kill
+       the UA `margin: auto` that centers a showModal() dialog (pins it top-left). */
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius);
+    background: var(--bg-2);
+    color: var(--ink);
+    box-shadow: 0 40px 120px -30px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+    transition: opacity 0.32s var(--ease), transform 0.32s var(--ease),
+      overlay 0.32s var(--ease) allow-discrete, display 0.32s var(--ease) allow-discrete;
+  }
+  .modal[open] {
+    opacity: 1;
+    transform: none;
+  }
+  @starting-style {
+    .modal[open] {
+      opacity: 0;
+      transform: translateY(10px) scale(0.99);
+    }
+  }
+  .modal::backdrop {
+    background: color-mix(in oklab, #0a0907 60%, transparent);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.32s var(--ease), overlay 0.32s var(--ease) allow-discrete,
+      display 0.32s var(--ease) allow-discrete;
+  }
+  .modal[open]::backdrop {
+    opacity: 1;
+  }
+  @starting-style {
+    .modal[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  .modal__panel {
+    display: flex;
+    flex-direction: column;
+    max-height: 92svh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .modal__panel::before {
+    content: '';
+    position: sticky;
+    top: 0;
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, var(--ca), var(--cas) 55%, transparent);
+    z-index: 3;
+  }
+
+  .modal__head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-6) var(--space-6) var(--space-4);
+  }
+  .modal__heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .modal__title {
+    font-size: var(--step-3);
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .modal__aka {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ink-3);
+  }
+  .modal__oneliner {
+    color: var(--ink-2);
+    font-size: var(--step-1);
+  }
+  .modal__close {
+    margin-left: auto;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid var(--hairline);
+    color: var(--ink-2);
+    position: sticky;
+    top: var(--space-4);
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+  .modal__close:hover {
+    color: var(--ink);
+    background: var(--bg-3);
+    border-color: var(--hairline-strong);
+  }
+
+  .modal__hook {
+    padding: 0 var(--space-6) var(--space-5);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--ink);
+    max-width: 60ch;
+  }
+
+  .modal__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    padding: 0 var(--space-6) var(--space-7);
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--space-6);
+  }
+  .modal__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    min-width: 0;
+  }
+  .modal__shot {
+    margin: 0;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--bg-3);
+  }
+  .modal__media :global(img),
+  .modal__media {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .modal__shot figcaption {
+    font-size: var(--step--1);
+    color: var(--ink-3);
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .modal__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .modal__story {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    color: var(--ink-2);
+    line-height: 1.65;
+    max-width: var(--measure);
+  }
+  .modal__meta-h {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: var(--space-3);
+    font-weight: 500;
+  }
+  .modal__tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .modal__tags li {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 0.35em 0.7em;
+    border-radius: 6px;
+  }
+  .modal__link {
+    align-self: flex-start;
+  }
+
+  @media (min-width: 900px) {
+    .modal__body {
+      grid-template-columns: 1.45fr 1fr;
+      align-items: start;
+    }
+    .modal__aside {
+      position: sticky;
+      top: var(--space-5);
+    }
+  }
+</style>
