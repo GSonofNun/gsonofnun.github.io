@@ -32,7 +32,7 @@ const sizes =
       widths={widths}
       sizes={sizes}
       alt={coverAlt}
-      loading="lazy"
+      loading={variant === 'feature' ? 'eager' : 'lazy'}
       decoding="async"
       fetchpriority={variant === 'feature' ? 'high' : 'auto'}
       pictureAttributes={{ class: 'card__picture' }}
@@ -226,7 +226,7 @@ const sizes =
     transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
   }
   .card:hover .card__cue,
-  .card__btn:focus-visible ~ * .card__cue {
+  .card:focus-within .card__cue {
     opacity: 1;
     transform: translateX(0);
   }

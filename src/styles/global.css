@@ -104,7 +104,11 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  /* Anchor offset so section tops clear nothing fixed (nav is not fixed) */
+}
+
+/* Anchor offset so section tops clear the 64px sticky header on nav clicks. */
+:where(section[id], main[id], [id='top']) {
+  scroll-margin-top: calc(64px + var(--space-4));
 }
 body {
   background: var(--bg);

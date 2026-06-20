@@ -18,9 +18,36 @@ import ThemeToggle from './ThemeToggle.astro';
 
     <div class="site-header__actions">
       <ThemeToggle />
+
+      <details class="nav-menu">
+        <summary class="nav-menu__btn" aria-label="Open navigation menu">
+          <svg class="nav-menu__icon nav-menu__icon--open" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <svg class="nav-menu__icon nav-menu__icon--close" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </summary>
+        <nav class="nav-menu__panel" aria-label="Primary (mobile)">
+          <a href="#work">Work</a>
+          <a href="#approach">Approach</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </details>
     </div>
   </div>
 </header>
+
+<script is:inline>
+  // Close the mobile disclosure after an in-page jump so the panel doesn't
+  // linger over the target section. No framework — just the native element.
+  (function () {
+    var menu = document.querySelector('.nav-menu');
+    if (!menu) return;
+    menu.querySelectorAll('.nav-menu__panel a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        menu.open = false;
+      });
+    });
+  })();
+</script>
 
 <style>
   .site-header {
@@ -108,9 +135,71 @@ import ThemeToggle from './ThemeToggle.astro';
     gap: var(--space-3);
   }
 
+  /* ---- Mobile disclosure nav (shown < 720px) ---------------------------- */
+  .nav-menu {
+    position: relative;
+  }
+  .nav-menu__btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-sm);
+    color: var(--ink-2);
+    list-style: none;
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+  .nav-menu__btn::-webkit-details-marker {
+    display: none;
+  }
+  .nav-menu__btn:hover {
+    color: var(--ink);
+    border-color: var(--ink-3);
+  }
+  .nav-menu__icon--close {
+    display: none;
+  }
+  .nav-menu[open] .nav-menu__icon--open {
+    display: none;
+  }
+  .nav-menu[open] .nav-menu__icon--close {
+    display: block;
+  }
+  .nav-menu__panel {
+    position: absolute;
+    top: calc(100% + var(--space-3));
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+    padding: var(--space-2);
+    background: color-mix(in oklab, var(--bg-2) 96%, transparent);
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+  }
+  .nav-menu__panel a {
+    font-size: var(--step-0);
+    color: var(--ink-2);
+    letter-spacing: 0.02em;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
+  }
+  .nav-menu__panel a:hover {
+    color: var(--ink);
+    background: var(--bg-3);
+  }
+
   @media (min-width: 720px) {
     .site-nav {
       display: flex;
+    }
+    .nav-menu {
+      display: none;
     }
   }
 </style>

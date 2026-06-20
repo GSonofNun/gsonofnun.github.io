@@ -3,9 +3,10 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 // Deploy target is host-agnostic static output. Set SITE_URL at build time
-// (e.g. SITE_URL=https://joshuagrzybowski.dev) so canonical/OG/sitemap URLs are
-// absolute. Falls back to a placeholder that is safe for local builds.
-const site = process.env.SITE_URL ?? 'https://joshuagrzybowski.dev';
+// to override the canonical origin (e.g. when a custom domain goes live).
+// Defaults to the live GitHub Pages origin so canonical/OG/sitemap URLs are
+// correct out of the box.
+const site = process.env.SITE_URL ?? 'https://gsonofnun.github.io';
 
 export default defineConfig({
   site,
