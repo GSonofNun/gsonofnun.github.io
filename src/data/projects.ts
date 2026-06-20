@@ -85,6 +85,7 @@ export const projects: Project[] = [
       'The conversation transcript — every user, assistant, and thinking message — is drawn by hand on Win2D rather than composed from XAML text controls. It’s a custom markdown renderer built to stream: tokens land and lay out incrementally, with no reflow flash. Diagrams are rendered the same way — no HTML, no web view. A native Sugiyama engine lays out a dozen Mermaid types — flowchart, sequence, state, class, ER, gantt and more — through a real pipeline: network-simplex ranking, barycenter crossing reduction, perimeter-aware port routing, drawn straight to the canvas. Its layout is validated in tests against MSAGL as an oracle, but ships with no external layout dependency. The surrounding chrome — tool-call cards, panels, source control — is standard WinUI.',
       'The editor stores text in a piece table indexed by a red-black tree, with TextMate-grammar highlighting and a Win2D renderer that only paints the visible viewport. The “Constellation” is a custom progress indicator that animates the agent’s working state with a real spring solver — Hooke’s-law forces, velocity integration — and respects reduced-motion. Every session — each message, tool call, and diff — persists to SQLite in WAL mode behind an FTS5 index, so the full history is searchable and replayable. The whole thing is covered by roughly 2,900 tests.',
     ],
+    link: { label: 'Microsoft Store', href: 'https://apps.microsoft.com/store/detail/9N3W6PQ7X087?cid=DevShareMCLPCS' },
   },
 
   {
@@ -93,10 +94,11 @@ export const projects: Project[] = [
     tier: 'application',
     oneLiner: 'A premium, contemplative markdown reader.',
     hook:
-      'A Win2D-backed renderer that draws real, bundled Spectral font faces directly to the canvas — no WebView, no RichTextBlock — inside a letterpress "Atelier" language.',
+      'A Win2D-backed renderer that draws real, bundled font faces directly to the canvas — Spectral for the body, EB Garamond for display italics, a true small-caps cut — no WebView, no RichTextBlock — inside a letterpress "Atelier" language.',
     accent: { base: '#CF8B6E', soft: '#E0AE97' },
     platform: 'WinUI 3 · .NET 9 · Win2D',
-    tech: ['WinUI 3', '.NET 9', 'Win2D', 'Markdig', 'Spectral (bundled)'],
+    status: 'Microsoft Store',
+    tech: ['WinUI 3', '.NET 9', 'Win2D', 'Markdig', 'Spectral (bundled)', 'EB Garamond (bundled)'],
     shots: [
       {
         key: 'Sefer/sefer-main.png',
@@ -116,9 +118,10 @@ export const projects: Project[] = [
     ],
     story: [
       'Sefer is for reading, not for managing. It opens onto a shelf — a bundled public-domain library — so the first launch already has something worth your attention. There is no telemetry and no AI, by design.',
-      'The renderer is the whole argument. Markdown is parsed with Markdig and then composed and drawn to a Win2D canvas using real, bundled Spectral font faces — the genuine optical sizes, not a web font approximated by a control. No WebView, no RichTextBlock. The result is letterpress-grade typography that holds together at any zoom.',
-      'The "Atelier" visual language — oxblood and terracotta on warm cream — treats the page as a printed object. Restraint is the feature.',
+      'The renderer is the whole argument. Markdown is parsed with Markdig, then composed and drawn to a Win2D canvas using real, bundled font faces — Spectral for the body, EB Garamond for the display italics, and a true small-caps cut — not synthetic slants and algorithmic bolding faked by a control. No WebView, no RichTextBlock. The result is letterpress-grade typography that holds together at any zoom.',
+      'The "Atelier" visual language — oxblood on warm cream by day, terracotta on deep coffee by night — treats the page as a printed object. Restraint is the feature.',
     ],
+    link: { label: 'Microsoft Store', href: 'https://apps.microsoft.com/store/detail/9NT0TWVRF882?cid=DevShareMCLPCS' },
   },
 
   {
@@ -128,7 +131,7 @@ export const projects: Project[] = [
     tier: 'application',
     oneLiner: 'A PDF engine built from the spec up.',
     hook:
-      'An ISO 32000-compliant renderer whose TileCache rearchitecture — a union render-target with a slice model — cut per-tile cost from ~127 ms to ~0.2 ms. Roughly 600×.',
+      'An engine built to ISO 32000, whose TileCache rearchitecture — a union render-target with a slice model — interprets a tile-block once and slices each tile out in ~0.2 ms, dropping the marginal cost of a tile ~600× (from ~127 ms re-interpreting the whole page per tile).',
     accent: { base: '#3DA0F2', soft: '#7FC1F7' },
     platform: 'Win2D / Direct2D · .NET 9',
     tech: ['Win2D', 'Direct2D', '.NET 9', 'ComputeSharp D2D', 'memory-mapped I/O'],
@@ -151,7 +154,7 @@ export const projects: Project[] = [
     ],
     story: [
       'JeriRead renders PDFs with an engine written against ISO 32000 directly — stream filters, the font model, blend and transparency via ComputeSharp D2D shaders — rather than wrapping someone else’s viewer.',
-      'The defining work was the tile cache. The original per-tile path cost about 127 ms; a rearchitected TileCache built on a single union render-target with a slice model brought that to roughly 0.2 ms — about a 600× reduction. The guiding metric is "time-to-crisp": how long after you stop scrolling until the page is sharp.',
+      'The defining work was the tile cache. Instead of re-interpreting the whole page per tile (~127 ms each), the rearchitected TileCache interprets a tile-block once over a single union render-target and slices each tile out of it in ~0.2 ms — the marginal cost of a tile dropped roughly 600×, collapsing a multi-second viewport fill to a couple hundred milliseconds. The guiding metric is "time-to-crisp": how long after you stop scrolling until the page is sharp, helped along by viewport-center-first scheduling and a parallel render pool.',
       'The surround is "Lumen" — a cool near-black ground with an azure accent — chosen so the document, not the chrome, is the brightest thing on screen.',
     ],
   },
@@ -162,10 +165,10 @@ export const projects: Project[] = [
     tier: 'application',
     oneLiner: 'A native C++ Git client for Windows.',
     hook:
-      'Zero dependencies, Direct2D rendering, and a closed-form analytical spring system — frame-rate-independent animation that is solved, not Euler-integrated.',
+      'A native C++20 Git client — no libgit2, no git.exe shell-out — with the object database, pack format, and Smart HTTP v2 protocol reimplemented from scratch. A lock-free parallel clone hits git-CLI parity on the Linux kernel: 289 s vs git’s 275 s over 11.3M objects.',
     accent: { base: '#4D8DF6', soft: '#86B4FA' },
     platform: 'C++20 · Direct2D',
-    tech: ['C++20', 'Direct2D', 'WinHTTP', 'zlib-ng', 'Win32 thread pool'],
+    tech: ['C++20', 'Direct2D', 'WinHTTP', 'zlib-ng (vendored)', 'Win32 threads'],
     shots: [
       {
         key: 'GitSmarter/Repo_View_With_SBS_Diff.png',
@@ -184,9 +187,9 @@ export const projects: Project[] = [
       },
     ],
     story: [
-      'GitSmarter is a Git client with no third-party dependencies. The UI is drawn in Direct2D; networking is WinHTTP; decompression is zlib-ng. It is built as a unity translation unit, which keeps the whole program in front of the compiler at once.',
-      'Cloning is direct-to-disk: the pack streams to a temp file while a 64 MB sliding-window memory-mapped view feeds decompression concurrently, so a large clone never balloons in memory. Delta resolution runs over a lock-free work queue — a Treiber stack with CAS push/pop over a pre-allocated node pool.',
-      'Motion is solved in closed form. Instead of integrating a spring every frame and accumulating error, GitSmarter evaluates the analytical solution at the current time — frame-rate-independent by construction, smooth on a variable-refresh display.',
+      'GitSmarter is a native C++20 Git client for Windows — no libgit2, no git.exe shell-out, no package manager. The full object database, pack format, and Smart HTTP v2 protocol are reimplemented from scratch; the only third-party code is zlib-ng, vendored as a submodule and built from source — a single ~200 KB exe against the Windows SDK. The UI is drawn in Direct2D, networking is WinHTTP, and it builds as a unity translation unit, keeping the whole program in front of the compiler at once.',
+      'Cloning is the headline. A lock-free parallel clone hits git-CLI parity on the Linux kernel — 289 s against git’s 275 s over 11.3M objects, 9.15M deltas, a 6 GB pack and 92K files. The pack streams direct-to-disk and generates its .idx straight from the stream rather than exploding loose objects (a 78 s → 47 ms write phase), while delta resolution runs over a lock-free Treiber-stack work queue with CAS push/pop on a pre-allocated node pool. A sharded LRU object cache — 16 shards, a lock per shard, routed by obj_index & 0xF — cuts contention from ~100% to ~6% at 32 threads, and the index is assembled during parallel checkout from synthetic metadata, eliminating 4N stat calls. SHA-1 chunking works around BCryptHashData’s 32-bit length limit for packs over 4 GB, and the whole client runs native on ARM64 with NEON.',
+      'The signature open animations — the command palette and context menu — are driven by a closed-form damped-spring solver: it branches on damping ratio (under/critically/overdamped) and evaluates the analytical solution at the current timestamp rather than Euler-integrating, so they stay correct on any refresh rate. Underneath, a self-driving frame clock times itself off QueryPerformanceCounter deltas and re-detects variable refresh via DwmGetCompositionTimingInfo, idling at near-zero CPU.',
     ],
   },
 
@@ -196,7 +199,7 @@ export const projects: Project[] = [
     tier: 'application',
     oneLiner: 'A WinUI 3 web browser.',
     hook:
-      'A WebView2 core wrapped in a native widget system with PWA install support, GPU pixel-shader chrome, and a soft-delete session model — closing a window never loses your tabs.',
+      'A WebView2 core wrapped in an AI-powered widget system: point it at any page and it discovers extractable data, builds a CSS-selector recipe, and renders a live, auto-refreshing widget driven by a headless WebView2 — in card, metric, or dashboard layouts.',
     accent: { base: '#5CB89A', soft: '#8FD3BC' },
     platform: 'WinUI 3 · .NET 8 · WebView2',
     tech: ['WinUI 3', '.NET 8', 'WebView2', 'ComputeSharp', 'SQLite'],
@@ -223,9 +226,9 @@ export const projects: Project[] = [
       },
     ],
     story: [
-      'Verity puts a real WinUI 3 application around a WebView2 rendering core: a native chrome, a widget system, and PWA install support, with GPU pixel shaders (ComputeSharp) for the ambient surfaces.',
-      'State is durable. Windows, tabs, and groups live in SQLite with a soft-delete model — a closed window is marked closed, not erased — so nothing you had open is ever actually gone. A single repository manager serializes writes behind a semaphore, and cross-window tab drag-and-drop is coordinated by a window manager.',
-      'Two themes, "Clarity" and "Nocturne", are driven entirely through theme resources so the switch is instant and complete.',
+      'Verity puts a real WinUI 3 application around a WebView2 rendering core, with native Fluent chrome and GPU-composited ambient surfaces. Its standout feature is an AI-powered widget system: point it at any page and it discovers extractable data, builds a CSS-selector recipe, and renders a live, auto-refreshing widget driven by a headless WebView2 — in card, metric, or dashboard layouts. A companion system learns per-site media controls (play/pause/next) with confidence scoring, surfacing a now-playing panel with shader-blurred artwork.',
+      'The chrome is GPU-composited: three ComputeSharp HLSL pixel shaders — an animated morphing gradient, a crossfade, and procedural noise — feed Win2D effect graphs for the background and accent surfaces, recolored live on theme switch.',
+      'State lives in a single SQLite database with WAL journaling and a versioned migration system. Windows, tabs, groups, and history are write-through persisted; closing a window soft-deletes its session rather than erasing it, so nothing you had open is ever gone. Two themes, "Clarity" and "Nocturne", are driven entirely through theme resources for an instant, complete switch.',
     ],
   },
 
@@ -235,11 +238,10 @@ export const projects: Project[] = [
     tier: 'application',
     oneLiner: 'A personal budgeting app.',
     hook:
-      'A WinUI 3 desktop app with a scripting CLI: NDJSON piped over stdin and applied in a single transaction, DPAPI-encrypted at rest, with an audit log you can roll back by id.',
+      'A WinUI 3 budgeting app over a SQLCipher database (AES-256, key sealed to the Windows user via DPAPI), with a trigger-enforced audit log that captures every writer — GUI or CLI — and rolls back any change by id.',
     accent: { base: '#2FBF8F', soft: '#74D7B6' },
     platform: 'WinUI 3 · SQLite',
-    status: 'Microsoft Store',
-    tech: ['WinUI 3', 'SQLite', 'DPAPI', 'System.CommandLine'],
+    tech: ['WinUI 3', 'SQLite', 'SQLCipher', 'DPAPI', 'System.CommandLine'],
     shots: [
       {
         key: 'Finstry/Budget_View.jpg',
@@ -248,8 +250,9 @@ export const projects: Project[] = [
       },
     ],
     story: [
-      'Finstry is a budgeting app that respects both the GUI and the terminal. The desktop app is WinUI 3 over SQLite; the database is encrypted at rest with DPAPI, tied to the Windows user.',
-      'The companion CLI makes the data programmable. A bulk command reads NDJSON from stdin and applies the whole batch inside one transaction on a pre-allocated connection — a 31-item budget that took minutes of clicking lands in under a second. Every mutation is written to an audit log, and any change can be undone by id.',
+      'Finstry is a budgeting app that respects both the GUI and the terminal — a WinUI 3 front end and a CLI sharing one extracted Finstry.Core data layer, so the CLI isn’t a reimplementation but the same repositories. The database is SQLCipher, transparently AES-256-encrypted at rest; its key is a 256-bit random value sealed to the Windows user with DPAPI, so there’s no password prompt, but the file is unreadable if copied to another machine or account.',
+      'The audit trail is enforced at the database level — SQLite triggers on every table capture any writer identically, whether the change came from the GUI, a per-command CLI call, or a bulk import, and any change can be rolled back by id even on rows a given client never touched.',
+      'The companion CLI makes the data programmable. A bulk command reads NDJSON from stdin and applies the batch in one transaction on a pre-allocated connection — one bulk call instead of 31 separate CLI invocations, each otherwise paying its own startup cost. Per-line errors are reported individually; fail-fast is opt-in via --stop-on-error. A --dry-run wraps the mutations in an always-rolled-back transaction but still returns the would-be row ids. Under MSIX, the CLI resolves the packaged database path automatically, refusing to run when multiple installed packages are ambiguous.',
     ],
   },
 
@@ -259,10 +262,10 @@ export const projects: Project[] = [
     tier: 'application',
     oneLiner: 'C++ vibration-analysis tooling.',
     hook:
-      'Real-time FFT (radix-2 Cooley-Tukey, up to 16K points) over memory-mapped data, with an 8-level decimation LOD cache that preserves per-pixel min/max at every zoom.',
+      'Real-time waveform, FFT (radix-2 Cooley-Tukey, up to 16K points), PSD, and STFT spectrogram in a tiling split-pane workspace, drawn from a 7-level decimation LOD pyramid that preserves per-pixel min/max at every zoom.',
     accent: { base: '#3DD8E0', soft: '#82E7EC' },
     platform: 'C++20 · Direct2D',
-    tech: ['C++20', 'Direct2D', 'WIC', 'memory-mapped I/O'],
+    tech: ['C++20', 'Direct2D', 'WIC', 'memory-mapped I/O', 'Windows Thread Pool'],
     shots: [
       {
         key: 'VibeSonic/Waveform_FFT_PSD.png',
@@ -271,8 +274,8 @@ export const projects: Project[] = [
       },
     ],
     story: [
-      'VibeSonic analyzes sound and vibration recordings in real time: time-domain waveforms, FFT magnitude, and power spectral density, side by side and synchronized.',
-      'The transform is a radix-2 Cooley-Tukey FFT up to 16K points, with selectable windows (Hann, Hamming, Blackman, flat-top) and RMS or peak-hold averaging. Large captures are read through memory-mapped I/O and drawn from an 8-level decimation LOD cache — and critically, every level preserves the per-pixel min and max, so peaks never vanish when you zoom out.',
+      'VibeSonic visualizes sound and vibration recordings in real time — time-domain waveform, FFT magnitude, PSD, and STFT spectrogram — in a tiling split-pane workspace with a linked cursor that tracks the same time/frequency position across every pane. A binary-tree layout engine (HSplit/VSplit nodes, draggable splitters, pane split and collapse) drives the workspace; a reverse-engineered VFW reader (a MATLAB Level-4 MAT variant) makes it a vibration tool, not just an audio viewer.',
+      'The transform is a radix-2 Cooley-Tukey FFT up to 16K points, with selectable windows (Hann, Hamming, Blackman, flat-top) and RMS or peak-hold averaging, computed on background threads via the Windows Thread Pool with progressive UI updates. The spectrogram offers four colormaps (Viridis, Jet, Grayscale, Hot) with dB conversion, drawn from a Direct2D bitmap texture. Large captures are read through memory-mapped I/O and drawn from a 7-level decimation LOD pyramid — persisted to a custom .lodx cache file and memory-mapped back on reopen — where every level stores per-pixel min and max, so peaks never vanish when you zoom out. Built from scratch on raw Win32 + Direct2D as a single ~400 KB binary with no third-party dependencies.',
     ],
   },
 
